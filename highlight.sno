@@ -1,0 +1,28 @@
+#!/usr/local/bin/snobol4 -b
+
+	&anchor = 1
+* flush OUTPUT immediately
+	output(.output, 6, "W")
+
+loop	line = input :f(end)
+	line ".HIGHLIGHT " rem . language :s(pipe)
+	output = line :(loop)
+
+* empty line to fixup line numbering
+pipe	output = "."
+* FIXME: hack to strip the last byte (linefeed) since source-highlight
+* is picky about newlines at the end of the file (will print another lineprefix)
+	output(.pipe, 100,,
++	       "| head -c -1 | source-highlight --outlang-def groff.outlang -s " language)
+
+pipe_l	line = input
+	line ".HIGHLIGHT" :s(close)
+	pipe = line :(pipe_l)
+
+close	endfile(100)
+* empty line to fixup line numbering
+* FIXME: the linefeed is necessary because source-highlight did not terminate
+* the last line
+	output = char(10) "." :(loop)
+
+end

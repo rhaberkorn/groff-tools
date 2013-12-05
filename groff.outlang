@@ -1,0 +1,72 @@
+extension "mom"
+
+doctemplate
+"
+.NEWCOLOR green RGB #33CC00
+.NEWCOLOR red RGB #FF0000
+.NEWCOLOR darkred RGB #990000
+.NEWCOLOR blue RGB #0000FF
+.NEWCOLOR brown RGB #9A1900
+.NEWCOLOR pink RGB #CC33CC
+.NEWCOLOR yellow RGB #FFCC00
+.NEWCOLOR cyan RGB #66FFFF
+.NEWCOLOR purple RGB #993399
+.NEWCOLOR orange RGB #FF6600
+.NEWCOLOR brightorange RGB #FF9900
+.NEWCOLOR brightgreen RGB #33FF33
+.NEWCOLOR darkgreen RGB #009900
+.NEWCOLOR black RGB #000000
+.NEWCOLOR teal RGB #008080
+.NEWCOLOR gray RGB #808080
+.NEWCOLOR darkblue RGB #000080
+.NEWCOLOR white RGB #FFFFFF
+"
+
+"
+"
+end
+
+# NOTE: There must be a Typewrite Bold style
+# I'm using the Latin Modern fonts that have this style.
+# Otherwise you could use Mom's \*[BOLDER] escape.
+
+bold		"\f[TTB]$text\fP"
+italics		"\f[TTI]$text\fP"
+# FIXME: no way to implement underline generically
+#underline
+
+#notfixed	"\fR$text\fP"
+#fixed		"\fR$text\fP"
+
+color		"\*[$style]$text\*[black]"
+
+colormap
+"green" "green"
+"red" "red"
+"darkred" "darkred"
+"blue" "blue"
+"brown" "brown"
+"pink" "pink"
+"yellow" "yellow"
+"cyan" "cyan"
+"purple" "purple"
+"orange" "orange"
+"brightorange" "brightorange"
+"brightgreen" "brightgreen"
+"darkgreen" "darkgreen"
+"black" "black"
+"teal" "teal"
+"gray" "gray"
+"darkblue" "darkblue"
+"white" "white"
+default "black"
+end
+
+# lines may be empty, so begin them with the non-spacing \&
+# also, this allows "." and "'" at the beginning of the line
+lineprefix "\&"
+
+translations
+"\\" "\\e"
+#"\t" "   "
+end

@@ -1,0 +1,138 @@
+#!/usr/local/bin/snobol4 -b
+
+***
+*** Definitions
+***
+	define('optspace(pattern)')
+	define('string()')
+	define('serialize()')
+	strings = array(2)
+	str_no = 0
+
+	define('emit_groff(str)')
+
+	define('begin_rule()')
+	define('end_rule()')
+
+	define('emit_nonterm()')
+	define('emit_term()')
+	define('emit_empty()')
+
+	define('begin_exp()')
+	define('end_exp()')
+
+	define('begin_alt()')
+	define('end_alt()')
+	define('repeat()')
+	define('repeat_with()')
+
+	&anchor = 1
+	&fullscan = 1
+
+***
+*** EBNF grammar
+***
+	letter = &lcase &ucase
+	digit = "0123456789"
+
+	space = span(" " char(9) char(10) char(13)) | ""
+	eol = break(char(10) char(13))
+	nonterm =  ( "`" break("`") $ *string() "`"
++		   | (any(letter) (span(letter digit "_") | "")) $ *string() )
++		   (optspace("~") *nonterm | "")
+	term = ( "'" break("'") $ *string() "'"
++	       | '"' break('"') $ *string() '"' )
++	       (optspace("~") *term | "")
+
+	lhs = nonterm
+	exp = nonterm *emit_nonterm()
++	    | term *emit_term()
++	    | optspace("[") *emit_empty() *begin_alt() *rhs optspace("]") *end_alt()
++	    | optspace("{") *begin_exp() *rhs optspace("}") *end_exp()
++	      (optspace("~") term *repeat_with() | *repeat())
++	    | optspace("(") *begin_exp() *rhs optspace(")") *end_exp()
++           | *emit_empty()
+	rhs = exp
++	      ( optspace("|") *begin_alt() *rhs *end_alt()
++	      | optspace(",") *rhs
++	      | "")
+
+* NOTE: have to reset str_no if there is no lhs, since
+* strings may already contain a nonterminal
+	rule = ( lhs optspace("=" | ":=" | "::=")
++	       | *?(str_no = 0) "" $ *string() )
++	       *begin_rule() rhs optspace(";") *end_rule()
+	comment = optspace("(*" breakx("*") "*)" | "#" eol)
+	groff = optspace("." eol $ str) *emit_groff(str)
+	pic = optspace("%" eol $ output)
+	grammar = arbno(comment | groff | pic | rule) rpos(0)
+
+***
+*** MAIN
+***
+	lineno = 1
+
+loop	line = input :f(end)
+	line ".lf " int . lineno :s(next)
+	line ".EBNF" :s(src.l)
+	lineno = lineno + 1
+next	output = line :(loop)
+
+src.l	line = input
+	lineno = lineno + 1
+	line ".EBNF" :s(compile)
+	src = src line char(10) :(src.l)
+
+compile
+	output = ".PS"
+	output = 'copy "syntax.pic";'
+	(src ? grammar, terminal = "FAILURE")
+	output = 'reset;'
+	output = ".PE"
+	output = ".lf " (lineno + 1)
+	src = "" :(loop)
+
+***
+*** Procedures
+***
+optspace
+	optspace = space pattern space :(return)
+
+string
+	string = .strings[str_no = str_no + 1] :(nreturn)
+serialize
+* NOTE: will leave str_no == 0
+	serialize = '"' strings[str_no] '" ' serialize
+	eq(str_no = str_no - 1, 0) :s(return)f(serialize)
+
+emit_groff
+	output = 'command ".' str '";' :(return)
+
+begin_rule
+	output = 'begin_rule(' serialize() ');' :(return)
+end_rule
+	output = 'end_rule();' :(return)
+
+emit_nonterm
+	output = 'nonterminal(' serialize() ');' :(return)
+emit_term
+	output = 'terminal(' serialize() ');' :(return)
+emit_empty
+	output = 'empty();' :(return)
+
+begin_exp
+	output = 'begin_group();' :(return)
+end_exp
+	output = 'end_group();' :(return)
+
+begin_alt
+        output = 'begin_alt(last []);' :(return)
+end_alt
+	output = 'end_alt(2nd last []);' :(return)
+
+repeat	output = 'repeat(last []);' :(return)
+repeat_with
+	output = 'repeat_with(last [],' serialize() ');' :(return)
+
+end
+

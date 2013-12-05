@@ -1,0 +1,110 @@
+linewid = linewid/2;
+
+define begin_group {
+  [Start: Here;
+}
+define end_group {
+  End: Here;] with .Start at Here;
+  move to last [].End;
+}
+
+define terminal {
+  begin_group();
+  arrow;
+  command ".FT TT";
+  command ".DOC_PT_SIZE +4";
+  circle $1;
+  command ".DOC_PT_SIZE -4";
+  command ".FT R";
+  line;
+  end_group();
+}
+
+define nonterminal {
+  begin_group();
+  arrow;
+  command ".FT I";
+  box $1;
+  command ".FT R";
+  line;
+  end_group();
+}
+
+define keyword {
+  begin_group();
+  arrow;
+  command ".FT TT";
+  box $1;
+  command ".FT R";
+  line;
+  end_group();
+}
+
+define empty {
+  begin_group();
+  # straight line, as long as a box would be
+  line linewid+boxwid+linewid;
+  end_group();
+}
+
+###
+### repeat(block);
+### Block must have labels `Start` and `End`.
+###
+define repeat {
+  line from $1.End to $1.se - (0,circlerad*2);
+  arrow to ($1.Start,Here) then to $1.Start;
+  line from $1.End right linewid/2;
+}
+
+###
+### repeat(block,terminal_symbol);
+###
+define repeat_with {
+  command ".FT TT";
+  command ".DOC_PT_SIZE +4";
+  circle at bottom of $1 - (0,circlerad*2) $2;
+  command ".DOC_PT_SIZE -4";
+  command ".FT R";
+
+  arrow from $1.End to ($1.End,last circle) then \
+        to east of last circle;
+  arrow from west of last circle to ($1.Start,last circle .e) then \
+        to $1.Start;
+  line from $1.End right linewid/2;
+}
+
+### begin_alt(base);
+define begin_alt {
+  line from $1.Start to $1.sw - (0,boxht);
+  begin_group();
+}
+
+### end_alt(base);
+define end_alt {
+  end_group();
+  # base might be smaller than alternative
+  if (Here.x < $1.End.x) then {
+    line to ($1.End,Here);
+  }
+  arrow to (Here,$1.End);
+  # Extend end of base if it is smaller than alternative
+  # and leave linewid/2 space for next alternative
+  line from $1.End to Here + (linewid/2,0);
+}
+
+define begin_rule {
+  move down;
+  right;
+  command ".FT I";
+  {$1 at Here - (boxwid/2,0)}
+  command ".FT R";
+  begin_group();
+  line;
+}
+
+define end_rule {
+  arrow;
+  end_group();
+  move to last [].sw;
+}

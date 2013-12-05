@@ -1,0 +1,40 @@
+#!/usr/local/bin/snobol4 -b
+
+	&anchor = 1
+
+	float = span("0123456789.")
+
+	count = 0
+	lineno = 1
+
+loop	line = input :f(end)
+	line ".lf " float . lineno :s(next)
+	line ".UML" rem . options :s(pipe)
+	lineno = lineno + 1
+next	output = line :(loop)
+
+pipe	filename = "uml_temp" (count = count + 1) ".pdf"
+	output(.pipe, 100,,
++	       "| plantuml -pipe -tsvg -failonerror -config plantuml.cfg | "
++	       "rsvg-convert -f pdf -o " filename)
+	pipe = "@startuml"
+
+pipe_l	line = input
+	lineno = lineno + 1
+	line ".UML" :s(close)
+	pipe = line :(pipe_l)
+
+close	pipe = "@enduml"
+	endfile(100)
+
+* get PDF dimensions
+	input(.pipe, 100,, "|pdfinfo " filename)
+get_info
+	pipe "Page size:" span(" ") float . width " x " float . height :f(get_info)
+	endfile(100)
+
+	output = ".PDF_IMAGE " filename " " width "p " height "p" options
+	output = ".lf " (lineno + 1) :(loop)
+
+end
+
