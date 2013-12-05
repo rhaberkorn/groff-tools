@@ -1,0 +1,29 @@
+.EBNF
+###
+### SQL SELECT FROM statement
+###
+
+%linewid = linewid/2;
+%boxwid = boxwid*1.3;
+%boxht = boxht*0.8;
+%circlerad = boxht/2;
+
+`\f[BI]SELECT\fP`~Statement = `\fBSELECT\fP`, ("*" | {Derived~Column}~","),
+                              Table;
+Derived~Column = Scalar~Expression, [`\fBAS\fP`, Column~Name];
+
+Table = `\fBFROM\fP`, {Table~Name}~",",
+        [`\f[BI]WHERE\fP`~Clause],
+        [`\f[BI]GROUP BY\fP`~Clause],
+        [`\f[BI]ORDER BY\fP`~Clause];
+
+`\f[BI]WHERE\fP`~Clause = `\fBWHERE\fP`, Condition;
+
+`\f[BI]GROUP BY\fP`~Clause = `\fBGROUP\fP`, `\fBBY\fP`,
+                             {Column~Name}~",";
+
+`\f[BI]ORDER BY\fP`~Clause = `\fBORDER\fP`, `\fBBY\fP`, {
+                                Column~Name,
+                                [`\fBASCENDING\fP` | `\fBDESCENDING\fP`]
+                              }~",";
+.EBNF
