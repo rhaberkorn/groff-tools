@@ -20,7 +20,8 @@ Most EBNF constructs and some extensions are supported, but I'm too lazy to docu
 all of them now.
 
 To build the sample `select-from.ebnf`, type something like:
-  cat samples/select-from.ebnf | ./ebnf.sno | pic | groff -Tps >select-from.ps
+
+    cat samples/select-from.ebnf | ./ebnf.sno | pic | groff -Tps >select-from.ps
 
 ## HIGHLIGHT
 
@@ -33,19 +34,22 @@ The output is formatted according to `groff.outlang` which currently only works 
 the [mom macros](http://www.schaffter.ca/mom/).
 
 Example:
-  .QUOTE
-  .CODE
-  .HIGHLIGHT c
-  #include <stdio.h>
 
-  int main(int argc, char **argv)
-  {
-     printf("Hello world!\n");
-     return 0;
-  }
-  .HIGHLIGHT
-  .CODE OFF
-  .QUOTE OFF
+```
+.QUOTE
+.CODE
+.HIGHLIGHT c
+#include <stdio.h>
+
+int main(int argc, char **argv)
+{
+	printf("Hello world!\n");
+	return 0;
+}
+.HIGHLIGHT
+.CODE OFF
+.QUOTE OFF
+```
 
 ## UML
 
