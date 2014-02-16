@@ -57,9 +57,12 @@ int main(int argc, char **argv)
 renders an embedded diagram with [PlantUML](http://plantuml.sourceforge.net/)
 and automatically emits the appropriate Mom `PDF_IMAGE` macro calls.
 
+Naturally, this leaves around PDF images (`uml_tempX.pdf`) that you should remove
+after generating your document.
+
 ## HTML Tables
 
-`htbl.tes` is a quick and dirty [SciTECO](http://plantuml.sourceforge.net/) script
+`htbl.tes` is a quick and dirty [SciTECO](http://rhaberkorn.github.com/sciteco/) script
 that can act as a drop-in replacement for the tbl preprocessor that generates
 proper HTML tables when the Groff html output device is used.
 With the original tbl preprocessor, tables are (and must be) rendered by the postscript
