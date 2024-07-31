@@ -23,6 +23,46 @@ To build the sample `select-from.ebnf`, type something like:
 
     cat samples/select-from.ebnf | ./ebnf.sno | pic | groff -Tps >select-from.ps
 
+## HIGHLIGHT (Python)
+
+`pygments-groff.py` is a syntax highlighting preprocessor based on [Pygments](https://pygments.org/) and
+consequently written in Python 3.
+It is the most powerful (and probably fastest) of the syntax highlighting preprocessors presented here.
+It should also be more portable as it does not rely on stdout redirection magic.
+It should work with all Groff macro suites and even preserves the line numbering
+in Groff error messages.
+
+You can process embedded blocks of code as in the following ms-based example:
+
+```groff
+.LD
+.CW
+.lg 0
+.HIGHLIGHT c
+#include <stdio.h>
+
+int main(int argc, char **argv)
+{
+	printf("Hello world!\n");
+	return 0;
+}
+.HIGHLIGHT
+.DE
+```
+
+Note that you may have to do more before `.HIGHLIGHT` - for instance redefine chars -
+depending on your use case.
+
+The `default` language identifier is useful to include code without highlighting,
+but still benefit from Pygment's preprocessing in order to achieve verbatim text.
+A list of language identifiers (short names) can be found on the [Pygments website](https://pygments.org/languages/).
+
+Just like `highlight.lua`, you can specify a file name directly after the language identifier:
+
+```groff
+.HIGHLIGHT c hello.c
+```
+
 ## HIGHLIGHT (SNOBOL4)
 
 `highlight.sno` is a small preprocessor written in [CSNOBOL4](http://www.snobol4.org/csnobol4/)
