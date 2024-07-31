@@ -12,7 +12,7 @@ are merely quick and dirty hacks that accumulated on my hard drive :-).
 
 ## EBNF
 
-`ebnf.sno` is a [CSNOBOL4](http://www.snobol4.org/csnobol4/) program that compiles
+`ebnf.sno` is a [CSNOBOL4](http://www.regressive.org/snobol4/csnobol4/) program that compiles
 extended BNF descriptions into GNU pic code using macros from `syntax.pic`.
 This effectively allows you to embed EBNF grammars in Groff source code and
 have it rendered as (box and arrow) syntax diagrams.
@@ -65,7 +65,7 @@ Just like `highlight.lua`, you can specify a file name directly after the langua
 
 ## HIGHLIGHT (SNOBOL4)
 
-`highlight.sno` is a small preprocessor written in [CSNOBOL4](http://www.snobol4.org/csnobol4/)
+`highlight.sno` is a small preprocessor written in [CSNOBOL4](http://www.regressive.org/snobol4/csnobol4/)
 that processes blocks of source code embedded in your Groff document with
 [GNU Source-highlight](http://www.gnu.org/software/src-highlite/) to produce
 syntax highlighted text.
