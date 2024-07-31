@@ -1,0 +1,40 @@
+extension "ms"
+
+bold		"\f[CB]$text\fP"
+italics		"\f[CI]$text\fP"
+underline	"\f[CI]$text\fP"
+fixed		"\f[CR]$text\fP"
+color		"\m[$style]$text\m[black]"
+
+#anchor "$infilename : $linenum - $text"
+#reference "$text \(-> $infile:$linenum, page : $infilename:$linenum"
+
+# lines may be empty, so begin them with the non-spacing \&
+# also, this allows "." and "'" at the beginning of the line
+lineprefix "\&"
+
+colormap
+"green" "green"
+"red" "red"
+"darkred" "darkred"
+"blue" "blue"
+"brown" "brown"
+"pink" "pink"
+"yellow" "yellow"
+"cyan" "cyan"
+"purple" "purple"
+"orange" "orange"
+"brightorange" "brightorange"
+"brightgreen" "brightgreen"
+"darkgreen" "darkgreen"
+"black" "black"
+"teal" "teal"
+"gray" "gray"
+"darkblue" "darkblue"
+default "black"
+end
+
+translations
+"\\" "\\e"
+#"\t" "        "
+end

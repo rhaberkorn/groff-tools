@@ -23,19 +23,20 @@ To build the sample `select-from.ebnf`, type something like:
 
     cat samples/select-from.ebnf | ./ebnf.sno | pic | groff -Tps >select-from.ps
 
-## HIGHLIGHT
+## HIGHLIGHT (SNOBOL4)
 
 `highlight.sno` is a small preprocessor written in [CSNOBOL4](http://www.snobol4.org/csnobol4/)
 that processes blocks of source code embedded in your Groff document with
 [GNU Source-highlight](http://www.gnu.org/software/src-highlite/) to produce
 syntax highlighted text.
 
-The output is formatted according to `groff.outlang` which currently only works with
-the [mom macros](http://www.schaffter.ca/mom/).
+The output is formatted according to `groff.outlang`.
+Versions for the [mom macros](http://www.schaffter.ca/mom/) (`groff-mom.outlang`) and
+for the classic ms macros (`groff-ms.outlang`) are provided.
 
-Example:
+Example (mom):
 
-```
+```groff
 .QUOTE
 .CODE
 .HIGHLIGHT c
@@ -49,6 +50,18 @@ int main(int argc, char **argv)
 .HIGHLIGHT
 .CODE OFF
 .QUOTE OFF
+```
+
+## HIGHLIGHT (Lua)
+
+`highlight.lua` is a reimplementation of `highlight.sno` in Lua 5.2 and may work
+better on some operating systems.
+
+In addition to the aforementioned syntax, the Lua version allows you to specify a filename after
+the language identifier to process an external file:
+
+```groff
+.HIGHLIGHT c hello.c
 ```
 
 ## UML
